@@ -54,6 +54,8 @@ public:
      */
     void setGains(float Kp, float Ki, float Kd);
 
+    float getCurrentTarget() const;
+
 private:
     // ---- Hardware ----
     Adafruit_PWMServoDriver m_pwm;

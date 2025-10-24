@@ -109,6 +109,10 @@ void HeaterController::setGains(float Kp, float Ki, float Kd) {
     m_Kd = Kd;
 }
 
+float HeaterController::getCurrentTarget() const {
+    return m_targetTempC;
+}
+
 // ---- Private Helper Methods ----
 
 uint16_t HeaterController::percentToCounts(float pct) {

@@ -62,8 +62,10 @@ PeltierDevice::PeltierDevice(BLEServer* server) : HC(HeaterController(PWM_I2C_AD
                 if (w) {
                     targetUpdated = true;
                 }
-            },
-            "30.0"
+                else {
+                    a->setValue(std::to_string(HC.getCurrentTarget()));
+                }
+            }
         );
 
         //Define RealTemp Characteristic

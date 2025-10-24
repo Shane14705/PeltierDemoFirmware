@@ -94,6 +94,7 @@ void PeltierDevice::Update() {
         }
         catch (std::invalid_argument& e) {
             Serial.write("Unable to convert value to float for target temp");
+            targetUpdated = false;
         }
 
     }

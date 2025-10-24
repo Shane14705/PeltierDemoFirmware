@@ -10,11 +10,13 @@ class ConnectionManager : public BLEServerCallbacks {
 
     void onConnect(BLEServer* server) override {
         BLEServerCallbacks::onConnect(server);
+        Serial.println("Connected!");
         isConnected = true;
     }
 
     void onDisconnect(BLEServer* server) override {
         BLEServerCallbacks::onDisconnect(server);
+        Serial.println("Disconnected!");
         isConnected = false;
         server->startAdvertising();
     }

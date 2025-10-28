@@ -17,9 +17,9 @@ HeaterController::HeaterController(uint8_t i2c_addr, int therm_pin, int sleep_pi
     : m_pwm(i2c_addr), m_therm_pin(therm_pin), m_sleep_pin(sleep_pin) {
 
     // Default PID gains
-    m_Kp = 1.8f;
-    m_Ki = 0.20f;
-    m_Kd = 0.00f;
+    m_Kp = 2.5f;
+    m_Ki = 0.4f;
+    m_Kd = 0.02f;
 
     // Initialize state
     m_targetTempC = 25.0f;

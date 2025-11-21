@@ -13,8 +13,8 @@ const float HeaterController::DUTY_MIN = 0.0f;
 const uint32_t HeaterController::TS_MS = 20;
 const float HeaterController::ALPHA    = 0.30f;
 
-HeaterController::HeaterController(uint8_t i2c_addr, int therm_pin, int sleep_pin)
-    : m_pwm(i2c_addr), m_therm_pin(therm_pin), m_sleep_pin(sleep_pin) {
+HeaterController::HeaterController(Adafruit_PWMServoDriver pwm_servo_driver, int therm_pin, uint8_t chPWM, uint8_t chLOW, int sleep_pin)
+    : m_pwm(pwm_servo_driver), m_therm_pin(therm_pin), m_chPWM(chPWM), m_chLOW(chLOW), m_sleep_pin(sleep_pin) {
 
     // Default PID gains
     m_Kp = 2.5f;
@@ -30,11 +30,10 @@ HeaterController::HeaterController(uint8_t i2c_addr, int therm_pin, int sleep_pi
     m_last_ms = 0;
 }
 
-void HeaterController::begin(uint8_t sda_pin, uint8_t scl_pin) {
+void HeaterController::begin() {
     pinMode(m_sleep_pin, OUTPUT);
-    digitalWrite(m_sleep_pin, LOW); // Safe/off at boot
+    digitalWrite(m_sleep_pin, HIGH); //Always keep driver awake as requested
 
-    Wire.begin(sda_pin, scl_pin);
     m_pwm.begin();
     m_pwm.setPWMFreq(1000); // 1 kHz PWM
     setDutyPercent(0.0f);
@@ -122,12 +121,14 @@ uint16_t HeaterController::percentToCounts(float pct) {
 }
 
 void HeaterController::setDutyPercent(float pct) {
+    m_pwm.setPWM(m_chPWM, 0, 0);
+    m_pwm.setPWM(m_chLOW, 0, 0);
     if (pct <= 0.5f) {
-        m_pwm.setPWM(CH_EN, 0, 0);
-        digitalWrite(m_sleep_pin, LOW); // sleep when off
-    } else {
-        digitalWrite(m_sleep_pin, HIGH); // wake driver
-        m_pwm.setPWM(CH_EN, 0, percentToCounts(pct));
+        //We don't sleep the driver since other heaters might need it, just stop this one instead
+        return;
+    }
+    else {
+        m_pwm.setPWM(m_chPWM, 0, percentToCounts(pct));
     }
 }
 

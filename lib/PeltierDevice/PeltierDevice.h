@@ -4,12 +4,16 @@
 #include "HeaterController.h"
 #include <BLEUtils.h>
 
+#include "../HapticMotor/HapticMotor.h"
+#include "../HRMonitor/HRMonitor.h"
+
 // Define all the UUIDs
 #define SERVICE_ID "86b56da5-ed87-46b0-8aea-1459aa1746ff"
 #define HRCHAR_ID "21e1e876-b493-4495-a1fc-2da16c44072f"
-#define DUTYCYC_ID "f678658e-e614-4a5b-b4ff-eba13df6ff4d"
-#define TARGETTEMP_ID "14aaa533-6bd7-466b-9fd8-30bfdd203df9"
-#define REALTEMP_ID "6d03b5ee-72eb-4d68-ab87-85cd84a699fe"
+#define TARGET_TEMP1_ID "f678658e-e614-4a5b-b4ff-eba13df6ff4d"
+#define TARGET_TEMP2_ID "14aaa533-6bd7-466b-9fd8-30bfdd203df9"
+#define TARGET_TEMP3_ID "6d03b5ee-72eb-4d68-ab87-85cd84a699fe"
+#define HAPTIC_MOTOR_ID "0b5cf678-242c-4433-bdc3-7083f0ad2ab4"
 #define DESCRIPTOR_ID BLEUUID((uint16_t)0x2901)
 
 //I2C Address
@@ -41,7 +45,10 @@ class CharacteristicCallback: public BLECharacteristicCallbacks {
 
 class PeltierDevice {
     private:
-    HeaterController HC;
+    std::vector<HeaterController> heaters;
+    std::vector<bool> temperaturesUpdated;
+    HapticMotor hapticMotor;
+    HRMonitor hrmonitor;
     BLEService* ble_service;
     std::vector<BLECharacteristic*> Characteristics;
     std::vector<CharacteristicCallback*> callbacks;

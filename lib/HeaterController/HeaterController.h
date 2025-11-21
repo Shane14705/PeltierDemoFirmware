@@ -9,18 +9,20 @@ class HeaterController {
 public:
     /**
      * @brief Constructor for the HeaterController.
-     * @param i2c_addr The I2C address of the PCA9685 PWM driver.
-     * @param therm_pin The analog pin connected to the thermistor.
+     * @param pwm_servo_driver The PCA9685 PWM driver.
+     * @param therm_pin The analog pin connected to the thermistor for this heater.
+     * @param chPWM The PWM channel for this heater
+     * @param chLOW Not sure what this is used for, but I saw it in the schematic
      * @param sleep_pin The digital pin connected to the DRV8212 nSLEEP.
      */
-    HeaterController(uint8_t i2c_addr = 0x40, int therm_pin = A0, int sleep_pin = 10);
+    HeaterController(Adafruit_PWMServoDriver pwm_servo_driver, int therm_pin, uint8_t chPWM, uint8_t chLOW, int sleep_pin = 10);
 
     /**
      * @brief Initializes the hardware (I2C, PWM driver, pins).
      * @param sda_pin The I2C SDA pin.
      * @param scl_pin The I2C SCL pin.
      */
-    void begin(uint8_t sda_pin, uint8_t scl_pin);
+    void begin();
 
     /**
      * @brief Main update loop. This should be called repeatedly in the main loop().
@@ -60,10 +62,11 @@ private:
     // ---- Hardware ----
     Adafruit_PWMServoDriver m_pwm;
     int m_therm_pin;
+    uint8_t m_chPWM;
+    uint8_t m_chLOW;
     int m_sleep_pin;
 
     // ---- Thermistor Constants ----
-    static const int   THERM_ADC_PIN = A0;
     static const float VCC;
     static const float R_FIXED;
     static const float R0;

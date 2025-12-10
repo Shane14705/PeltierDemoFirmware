@@ -59,7 +59,8 @@ PeltierDevice::PeltierDevice(BLEServer* server) : hapticMotor(HapticMotor(20,21)
             BLECharacteristic::PROPERTY_WRITE, //want to have acknowledge, but not sure if the unity library supports it
             [&, this](BLECharacteristic* a, bool w) {
                 if (w) {
-                    targetUpdated = true;
+                    temperaturesUpdated[0] = true;
+                    Serial.write("Target Temperature 1 set");
                 }
                 else {
                     a->setValue(std::to_string(this->heaters[0].getCurrentTarget()));
@@ -75,7 +76,8 @@ PeltierDevice::PeltierDevice(BLEServer* server) : hapticMotor(HapticMotor(20,21)
             BLECharacteristic::PROPERTY_WRITE, //want to have acknowledge, but not sure if the unity library supports it
             [&, this](BLECharacteristic* a, bool w) {
                 if (w) {
-                    targetUpdated = true;
+                    temperaturesUpdated[1] = true;
+                    Serial.write("Target Temperature 2 set");
                 }
                 else {
                     a->setValue(std::to_string(this->heaters[1].getCurrentTarget()));
@@ -91,7 +93,8 @@ PeltierDevice::PeltierDevice(BLEServer* server) : hapticMotor(HapticMotor(20,21)
             BLECharacteristic::PROPERTY_WRITE, //want to have acknowledge, but not sure if the unity library supports it
             [&, this](BLECharacteristic* a, bool w) {
                 if (w) {
-                    targetUpdated = true;
+                    temperaturesUpdated[2] = true;
+                    Serial.write("Target Temperature 3 set");
                 }
                 else {
                     a->setValue(std::to_string(this->heaters[2].getCurrentTarget()));
@@ -106,6 +109,7 @@ PeltierDevice::PeltierDevice(BLEServer* server) : hapticMotor(HapticMotor(20,21)
             BLECharacteristic::PROPERTY_WRITE, //want to have acknowledge, but not sure if the unity library supports it
             [&, this](BLECharacteristic* a, bool w) {
                 if (w) {
+                    Serial.write("Haptic pulse set");
                     hapticMotor.pulse(std::stoi(a->getValue()));
                 }
             }
@@ -155,6 +159,7 @@ void PeltierDevice::Update() {
     hrmonitor.process();
     for (auto&& heater : heaters) {
         heater.update();
+        //Serial.println(std::to_string(hrmonitor.getLatestHR()).c_str());
     }
 
 

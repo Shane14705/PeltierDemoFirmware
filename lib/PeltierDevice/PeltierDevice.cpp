@@ -157,10 +157,18 @@ void PeltierDevice::Update() {
 
     hapticMotor.update();
     hrmonitor.process();
+    //Update Loop Output: LOG: hapticstate, hr, temp1, targ1, temp2, targ2, temp3, targ3
+    Serial.print(hapticMotor.isEnabled());
+    Serial.print(',');
+    Serial.print(hrmonitor.getLatestHR());
     for (auto&& heater : heaters) {
         heater.update();
-        //Serial.println(std::to_string(hrmonitor.getLatestHR()).c_str());
+        Serial.print(',');
+        Serial.print(heater.getCurrentTemperature());
+        Serial.print(',');
+        Serial.print(heater.getCurrentTarget());
     }
+    Serial.write('\n');
 
 
 }

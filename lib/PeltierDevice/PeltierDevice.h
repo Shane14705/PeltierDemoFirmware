@@ -3,6 +3,7 @@
 
 #include "HeaterController.h"
 #include <BLEUtils.h>
+#include <string>
 
 #include "../HapticMotor/HapticMotor.h"
 #include "../HRMonitor/HRMonitor.h"

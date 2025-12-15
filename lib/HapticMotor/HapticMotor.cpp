@@ -32,6 +32,10 @@ void HapticMotor::update() {
     }
 }
 
+bool HapticMotor::isEnabled() {
+    return _enabled;
+}
+
 //Pulse length isn't precise but should be good enough
 void HapticMotor::pulse(int ms) {
     _pulse_len = ms;

@@ -4,9 +4,9 @@ import csv
 from datetime import datetime
 
 # --- Configuration ---
-SERIAL_PORT = 'COM3'      # Change to 'COM3', '/dev/ttyUSB0', etc.
+SERIAL_PORT = '/dev/cu.usbmodem101'      # Change to 'COM3', '/dev/ttyUSB0', etc.
 BAUD_RATE = 115200        # Must match ESP32 baud rate
-CSV_FILENAME = 'sensor_data.csv'
+CSV_FILENAME = datetime.now().strftime('%Y-%m-%d_H:%M:%S_') + 'sensor_data.csv'
 
 def start_logging():
     # Open the CSV file in append mode

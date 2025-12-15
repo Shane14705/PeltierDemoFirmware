@@ -158,6 +158,7 @@ void PeltierDevice::Update() {
     hapticMotor.update();
     hrmonitor.process();
     //Update Loop Output: LOG: hapticstate, hr, temp1, targ1, temp2, targ2, temp3, targ3
+    Serial.print("LOG: ");
     Serial.print(hapticMotor.isEnabled());
     Serial.print(',');
     Serial.print(hrmonitor.getLatestHR());
